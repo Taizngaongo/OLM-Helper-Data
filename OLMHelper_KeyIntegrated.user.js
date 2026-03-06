@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OLM Helper
 // @namespace    http://tampermonkey.net/
-// @version      1.5.2
+// @version      1.5.3
 // @description  Công cụ giúp bạn làm bài trên OLM dễ vcl =)))
 // @author       Taiz Cu To
 // @match        https://olm.vn/chu-de/*
@@ -9,8 +9,8 @@
 // @grant        unsafeWindow
 // @grant        GM_xmlhttpRequest
 // @run-at       document-start
-// @updateURL    https://wanzdoan.site/OLMHelper.user.js
-// @downloadURL  https://wanzdoan.site/OLMHelper.user.js
+// @updateURL    https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/OLMHelper_KeyIntegrated.user.js
+// @downloadURL  https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/OLMHelper_KeyIntegrated.user.js
 // @icon         https://play-lh.googleusercontent.com/PMA5MRr5DUJBUbDgdUn6arbGXteDjRBIZVO3P3z9154Kud2slXPjy-iiPwwKfvZhc4o=w240-h480-rw
 // ==/UserScript==
 
@@ -29,9 +29,9 @@
   const LS_STEALTH = "olm_stealth";
   const LS_AUTO_SEARCH = "olm_auto_search";
   const LS_AUTO_SOLVE = "olm_auto_solve";
-  const CURRENT_VERSION = "1.5.1";
-  const VERSION_CHECK_URL = "DÁN_LINK_RAW_VERSION_JSON_CỦA_BẠN_VÀO_ĐÂY";
-  const UPDATE_URL = "DÁN_LINK_RAW_SCRIPT_USER_JS_CỦA_BẠN_VÀO_ĐÂY";
+  const CURRENT_VERSION = "1.5.3";
+  const VERSION_CHECK_URL = "https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/version.json";
+  const UPDATE_URL = "https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/OLMHelper_KeyIntegrated.user.js";
 
   const LS_VISIBLE = "olm_visible";
   const LS_AUTH_KEY_V4 = "olm_auth_key_v4";
@@ -886,8 +886,12 @@
     }
 
     async checkUpdate() {
+      console.log(`[OLM Helper] Checking for update... Current: ${CURRENT_VERSION}`);
       try {
-        if (typeof GM_xmlhttpRequest === "undefined") return null;
+        if (typeof GM_xmlhttpRequest === "undefined") {
+          console.warn("[OLM Helper] GM_xmlhttpRequest is undefined. Cannot check for updates.");
+          return null;
+        }
         return new Promise((res) => {
           GM_xmlhttpRequest({
             method: "GET",
@@ -896,15 +900,29 @@
             onload: (resp) => {
               try {
                 const data = JSON.parse(resp.responseText);
+                console.log("[OLM Helper] Version on server:", data.version);
                 if (data.version && data.version !== CURRENT_VERSION) {
+                  console.log("[OLM Helper] NEW VERSION DETECTED!");
                   res(data.version);
-                } else res(null);
-              } catch { res(null); }
+                } else {
+                  console.log("[OLM Helper] Script is up to date.");
+                  res(null);
+                }
+              } catch (e) {
+                console.error("[OLM Helper] Error parsing version JSON:", e);
+                res(null);
+              }
             },
-            onerror: () => res(null)
+            onerror: (err) => {
+              console.error("[OLM Helper] Update check failed:", err);
+              res(null);
+            }
           });
         });
-      } catch { return null; }
+      } catch (e) {
+        console.error("[OLM Helper] checkUpdate Exception:", e);
+        return null;
+      }
     }
 
     async init() {
@@ -1011,7 +1029,7 @@
         <div class="auth-inner">
           <div class="auth-header">
             <img src="https://play-lh.googleusercontent.com/PMA5MRr5DUJBUbDgdUn6arbGXteDjRBIZVO3P3z9154Kud2slXPjy-iiPwwKfvZhc4o=w240-h480-rw">
-            <div class="auth-title">OLM Helper V1.4</div>
+            <div class="auth-title">OLM Helper V1.5.1</div>
             <div class="auth-subtitle">Hệ thống xác thực bảo mật</div>
           </div>
           <div class="auth-tabs" ${newVersion ? 'style="display:none"' : ''}>
@@ -3994,4 +4012,3 @@
     };
   }
 })();
-
