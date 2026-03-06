@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OLM Helper
 // @namespace    http://tampermonkey.net/
-// @version      1.5.3
+// @version      1.5.4
 // @description  Công cụ giúp bạn làm bài trên OLM dễ vcl =)))
 // @author       Taiz Cu To
 // @match        https://olm.vn/chu-de/*
@@ -29,7 +29,7 @@
   const LS_STEALTH = "olm_stealth";
   const LS_AUTO_SEARCH = "olm_auto_search";
   const LS_AUTO_SOLVE = "olm_auto_solve";
-  const CURRENT_VERSION = "1.5.3";
+  const CURRENT_VERSION = "1.5.4";
   const VERSION_CHECK_URL = "https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/version.json";
   const UPDATE_URL = "https://raw.githubusercontent.com/Taizngaongo/OLM-Helper-Data/main/OLMHelper_KeyIntegrated.user.js";
 
@@ -4012,3 +4012,4 @@
     };
   }
 })();
+
