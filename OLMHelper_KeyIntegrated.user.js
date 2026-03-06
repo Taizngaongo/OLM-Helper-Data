@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OLM Helper
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.5.2
 // @description  Công cụ giúp bạn làm bài trên OLM dễ vcl =)))
 // @author       Taiz Cu To
 // @match        https://olm.vn/chu-de/*
@@ -3994,3 +3994,4 @@
     };
   }
 })();
+
